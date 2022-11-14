@@ -1,0 +1,17 @@
+<div>
+   <div id="toolbar" >
+     <button id="undo" (click)="handleUndo()" >Undo</button>
+     <button id="redo" (click)="handleRedo()" >Redo</button>
+     <button id="download" (click)="handleDownload()" >Download</button>
+     <button id="download-svg" (click)="handleDownloadSVG()" >Download SVG</button>
+     <button id="save" (click)="handleSave()" >Save</button>
+     <button id="open" (click)="buildProject()" >Build</button>
+  </div>
+  <div id="upload-file" >
+     <label for="myfile">Select a file:</label>
+     <input type="file" id="myfile" name="myfile"  >
+     <!-- <img src="../../../mvnProjects/" alt=""> -->
+  </div>
+  <div id="dmn-editor"></div>
+ </div>
+
