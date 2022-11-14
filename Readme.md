@@ -5,4 +5,4 @@ Run `node index.js` for a dev server.
 
 ## Path modification
 
-Please change the path manually, mentioned inside api's
+Please change the path manually inside the index.js file
