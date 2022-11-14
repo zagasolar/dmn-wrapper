@@ -33,36 +33,33 @@ app.post("/createProject", (req, res) => {
 
   //Create Project
   //   shell.cd(`${__dirname}\\mvnProject`);
-  shell.cd("D:\\DMNDesigner\\Angular-app\\DMN-Node\\mvnProject");
-  console.log(__dirname);
+  if (
+    shell.find("mavenProject", (res) => {
+      if (res == 1) {
+        shell.mkdir("mavenProject");
+      }
+    })
+  )
+    shell.cd("mavenProject");
   shell.exec(
     `mvn archetype:generate -DarchetypeGroupId=org.kie -DarchetypeArtifactId=kie-drools-dmn-archetype -DarchetypeVersion=8.30.0.Final -DgroupId=${groupId} -DartifactId=${artifactId} -Dversion=${version} -DinteractiveMode=false.`,
     (err) => {
       console.log(err);
 
       if (err == 0) {
+        shell.rm(`${artifactId}/src/main/resources/Traffic Violation.dmn`);
         shell.rm(
-          `D:\\DMNDesigner\\Angular-app\\DMN-Node\\mvnProject\\${artifactId}\\src\\main\\resources\\Traffic Violation.dmn`
-        );
-        shell.rm(
-          `D:\\DMNDesigner\\Angular-app\\DMN-Node\\mvnProject\\${artifactId}\\src\\test\\java\\com\\example\\ScenarioJunitActivatorTest.java`
+          `${artifactId}/src/test/java/com/example/ScenarioJunitActivatorTest.java`
         );
         shell.rm(
-          `D:\\DMNDesigner\\Angular-app\\DMN-Node\\mvnProject\\${artifactId}\\src\\test\\java\\com\\example\\TrafficViolationTest.java`
+          `${artifactId}/src/test/java/com/example\\TrafficViolationTest.java`
         );
+        shell.rm("-fR", `${artifactId}/src/test/java/utils`);
+        shell.rm(`${artifactId}/src/test/resources/logback-test.xml`);
         shell.rm(
-          "-fR",
-          `D:\\DMNDesigner\\Angular-app\\DMN-Node\\mvnProject\\${artifactId}\\src\\test\\java\\utils`
+          `${artifactId}/src/test/resources/TrafficViolationTest.scesim`
         );
-        shell.rm(
-          `D:\\DMNDesigner\\Angular-app\\DMN-Node\\mvnProject\\${artifactId}\\src\\test\\resources\\logback-test.xml`
-        );
-        shell.rm(
-          `D:\\DMNDesigner\\Angular-app\\DMN-Node\\mvnProject\\${artifactId}\\src\\test\\resources\\TrafficViolationTest.scesim`
-        );
-        shell.touch(
-          `D:\\DMNDesigner\\Angular-app\\DMN-Node\\mvnProject\\${artifactId}\\src\\main\\resources\\${dmnModelName}.dmn`
-        );
+        shell.touch(`${artifactId}/src/main/resources/${dmnModelName}.dmn`);
         res.send({ result: "success" });
       } else {
         res.send({ result: "Failed to create" });
@@ -76,7 +73,7 @@ app.post("/getDmnFile", (req, res) => {
   var dmnModelName = req.body.dmnModel;
   console.log(artifactId);
   console.log(dmnModelName);
-  shell.cd("D:\\DMNDesigner\\Angular-app\\DMN-Node\\mvnProject");
+  shell.cd("mavenProject");
   console.log(shell.pwd());
   fs.readFile(
     `${artifactId}/src/main/resources/${dmnModelName}.dmn`,
@@ -97,7 +94,7 @@ app.post("/saveFile", (req, res) => {
   var artifactId = req.body.artifactId;
   var dmnModelName = req.body.dmnModelName;
   // var blob = new Blob([data]);
-  shell.cd("D:\\DMNDesigner\\Angular-app\\DMN-Node\\mvnProject");
+  shell.cd("mavenProject");
   fs.writeFile(
     `${artifactId}/src/main/resources/${dmnModelName}.dmn`,
     data,
@@ -113,7 +110,7 @@ app.post("/saveFile", (req, res) => {
 
 app.post("/buildProject", (req, res) => {
   var artifactId = req.body.artifactId;
-  shell.cd("D:\\DMNDesigner\\Angular-app\\DMN-Node\\mvnProject");
+  shell.cd("mavenProject");
   shell.cd(`${artifactId}`);
   shell.exec("mvn clean install", (err) => {
     if (err) {
